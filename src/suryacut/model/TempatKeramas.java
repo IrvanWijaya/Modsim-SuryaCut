@@ -26,6 +26,10 @@ public class TempatKeramas extends Pelayan{
         }
         return instance;
     }
+
+    public Pelanggan[] getServers() {
+        return servers;
+    }
     
     public int servePelangan(){
         if(queue.isEmpty())return -1;
