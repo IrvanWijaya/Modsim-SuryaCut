@@ -6,6 +6,7 @@
 package suryacut;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -57,28 +58,34 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TabPane tabTukangCukur;
 
-    private Label dadangQ = new Label();
-    private String dd = "";
-    
+    private HashMap<String, String> mapLblTextPencukur = new HashMap<String, String>();
+    private HashMap<String, Label> mapLblPencukur = new HashMap<String, Label>();
+    private Label temp;
+
     @FXML
     private void handleBtnSubmit(ActionEvent event) {
-        //this.choiceBoxPelayan.getSelectionModel().getSelectedItem();
-        dd += "\n" + this.fieldNama.getText();
-        dadangQ.setText(dd);
+        String pencukur = this.choiceBoxPelayan.getSelectionModel().getSelectedItem().toString();
+//        dd += "\n" + this.fieldNama.getText();
+//        dadangQ.setText(dd);
+        mapLblTextPencukur.put(pencukur, mapLblTextPencukur.get(pencukur)+"\n"+this.fieldNama.getText());
+        temp = mapLblPencukur.get(pencukur);
+        temp.setText(mapLblTextPencukur.get(pencukur));
+        mapLblPencukur.put(pencukur, temp);
+        
+        this.fieldNama.clear();
     }
 
-    public void changeChoiceBox(String gender){
+    public void changeChoiceBox(String gender) {
         this.choiceBoxPelayan.getItems().clear();
-        if(gender.equals("Pria")){
-            this.choiceBoxPelayan.getItems().addAll("Dadang","Sarwa");
-        }else{
-            this.choiceBoxPelayan.getItems().addAll("Sany","Brigitta");
+        if (gender.equals("Pria")) {
+            this.choiceBoxPelayan.getItems().addAll("Dadang", "Sarwa");
+        } else {
+            this.choiceBoxPelayan.getItems().addAll("Sany", "Brigitta");
         }
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dadangQ.setText(dd);
         this.start();
 
         ToggleGroup groupRdbGender = new ToggleGroup();
@@ -95,20 +102,24 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
+          
     }
 
     public void start() {
-
-        Tab tabSatu = new Tab("Dadang");
-        Label lblSatu = new Label();
-        lblSatu.textProperty().bind(this.dadangQ.textProperty());
-        tabSatu.setContent(lblSatu);
-        tabTukangCukur.getTabs().add(tabSatu);
-
-        Tab tabDua = new Tab("Sarwa");
-        Label lblDua = new Label();
-        lblDua.setText("BBB");
-        tabDua.setContent(lblDua);
-        tabTukangCukur.getTabs().add(tabDua);
+        //Buat tukang cukurnya di sini.
+        String namaPencukur[] = {"Dadang","Sarwa","Sany","Brigitta"};
+        int i;
+        for(i = 0; i < namaPencukur.length; i++){
+            mapLblTextPencukur.put(namaPencukur[i], "");
+            mapLblPencukur.put(namaPencukur[i], new Label());
+        }
+        
+        for (i = 0; i < namaPencukur.length; i++) {
+            Tab tab = new Tab(namaPencukur[i]);
+            Label label = new Label();
+            label.textProperty().bind(this.mapLblPencukur.get(namaPencukur[i]).textProperty());
+            tab.setContent(label);
+            tabTukangCukur.getTabs().add(tab);
+        }
     }
 }
