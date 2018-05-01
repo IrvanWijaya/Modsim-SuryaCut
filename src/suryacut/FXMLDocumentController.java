@@ -7,50 +7,108 @@ package suryacut;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 
 /**
  *
  * @author Irvan
  */
 public class FXMLDocumentController implements Initializable {
-    
+
     @FXML
     private TextField fieldNama;
-    
+
     @FXML
     private RadioButton rdbPria;
-    
+
     @FXML
     private RadioButton rdbWanita;
-    
+
     @FXML
     private ChoiceBox choiceBoxPelayan;
-    
+
     @FXML
     private TextField fieldPencarian;
-    
+
     @FXML
     private Button btnCari;
 
     @FXML
+    private Button btnSubmit;
+
+    @FXML
     private Label lblQueueKeramas;
+
+    @FXML
+    private TabPane tabTukangCukur;
+
+    private Label dadangQ = new Label();
+    private String dd = "";
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        
+    private void handleBtnSubmit(ActionEvent event) {
+        //this.choiceBoxPelayan.getSelectionModel().getSelectedItem();
+        dd += "\n" + this.fieldNama.getText();
+        dadangQ.setText(dd);
+    }
+
+    public void changeChoiceBox(String gender){
+        this.choiceBoxPelayan.getItems().clear();
+        if(gender.equals("Pria")){
+            this.choiceBoxPelayan.getItems().addAll("Dadang","Sarwa");
+        }else{
+            this.choiceBoxPelayan.getItems().addAll("Sany","Brigitta");
+        }
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        dadangQ.setText(dd);
+        this.start();
+
+        ToggleGroup groupRdbGender = new ToggleGroup();
+        this.rdbPria.setToggleGroup(groupRdbGender);
+        rdbPria.setUserData("Pria");
+        this.rdbWanita.setToggleGroup(groupRdbGender);
+        rdbWanita.setUserData("Wanita");
+
+        groupRdbGender.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                    Toggle old_toggle, Toggle new_toggle) {
+                if (groupRdbGender.getSelectedToggle() != null) {
+                    changeChoiceBox(groupRdbGender.getSelectedToggle().getUserData().toString());
+                }
+            }
+        });
+    }
+
+    public void start() {
+
+        Tab tabSatu = new Tab("Dadang");
+        Label lblSatu = new Label();
+        lblSatu.textProperty().bind(this.dadangQ.textProperty());
+        tabSatu.setContent(lblSatu);
+        tabTukangCukur.getTabs().add(tabSatu);
+
+        Tab tabDua = new Tab("Sarwa");
+        Label lblDua = new Label();
+        lblDua.setText("BBB");
+        tabDua.setContent(lblDua);
+        tabTukangCukur.getTabs().add(tabDua);
+    }
 }
