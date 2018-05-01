@@ -21,7 +21,10 @@ public class TukangCukur extends Pelayan{
     }
     
     public boolean serveNext(){
-        if(queue.isEmpty())return false;
+        if(queue.isEmpty()){
+            currentlyServed = null;
+            return false;
+        }
         currentlyServed=queue.poll();
         return true;
     }

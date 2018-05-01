@@ -33,4 +33,9 @@ public class Pelayan {
         }
         return -1;
     }
+    
+    public Pelanggan[] getQueue(){
+        if(this.queue.isEmpty())return null;
+        return (Pelanggan[])this.queue.toArray();
+    }
 }

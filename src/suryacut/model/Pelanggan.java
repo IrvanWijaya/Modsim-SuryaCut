@@ -12,10 +12,13 @@ package suryacut.model;
 public class Pelanggan {
     private String nama;
     private char gender;
+    private boolean keramas;
+    private String state;
 
-    public Pelanggan(String nama, char gender) {
+    public Pelanggan(String nama, char gender, boolean keramas) {
         this.nama = nama;
         this.gender = gender;
+        this.keramas = keramas;
     }
 
     public String getNama() {
@@ -24,5 +27,13 @@ public class Pelanggan {
 
     public char getGender() {
         return gender;
+    }
+    
+    public boolean getKeramas(){
+        return this.keramas;
+    }
+    
+    public void setState(String state){
+        this.state = state;
     }
 }
