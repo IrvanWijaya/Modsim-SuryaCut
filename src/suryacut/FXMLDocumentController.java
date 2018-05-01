@@ -10,7 +10,11 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -19,12 +23,29 @@ import javafx.scene.control.Label;
 public class FXMLDocumentController implements Initializable {
     
     @FXML
-    private Label label;
+    private TextField fieldNama;
+    
+    @FXML
+    private RadioButton rdbPria;
+    
+    @FXML
+    private RadioButton rdbWanita;
+    
+    @FXML
+    private ChoiceBox choiceBoxPelayan;
+    
+    @FXML
+    private TextField fieldPencarian;
+    
+    @FXML
+    private Button btnCari;
+
+    @FXML
+    private Label lblQueueKeramas;
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+        
     }
     
     @Override
