@@ -32,11 +32,12 @@
       <ChoiceBox fx:id="choiceBoxPelayan" layoutX="132.0" layoutY="167.0" prefWidth="150.0" />
       <Text layoutX="21.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search" />
       <TextField fx:id="fieldPencarian" layoutX="97.0" layoutY="231.0" />
-      <Text layoutX="28.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Cukur" />
-      <Text layoutX="21.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Keramas" />
-      <Label fx:id="lblQueueKeramas" layoutX="19.0" layoutY="448.0" prefHeight="97.0" prefWidth="438.0" text="Label" />
+      <Text layoutX="19.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Cukur" />
+      <Text layoutX="17.0" layoutY="471.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Keramas" />
+      <Label fx:id="lblQueueKeramas" layoutX="19.0" layoutY="474.0" prefHeight="97.0" prefWidth="438.0" text="Label" />
       <Button fx:id="btnCari" layoutX="260.0" layoutY="231.0" mnemonicParsing="false" text="Cari" />
       <Button fx:id="btnSubmit" layoutX="295.0" layoutY="167.0" mnemonicParsing="false" onAction="#handleBtnSubmit" text="Submit" />
-      <TabPane fx:id="tabTukangCukur" layoutX="18.0" layoutY="282.0" prefHeight="139.0" prefWidth="438.0" tabClosingPolicy="UNAVAILABLE" />
+      <TabPane fx:id="tabTukangCukur" layoutX="21.0" layoutY="309.0" prefHeight="139.0" prefWidth="438.0" tabClosingPolicy="UNAVAILABLE" />
+      <Button fx:id="btnSelesai" layoutX="97.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleBtnSelesai" text="Selesai Melayani" />
     </children>
 </AnchorPane>

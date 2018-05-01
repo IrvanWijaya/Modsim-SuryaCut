@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -51,6 +52,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Button btnSubmit;
+    
+    @FXML
+    private Button btnSelesai;
 
     @FXML
     private Label lblQueueKeramas;
@@ -67,12 +71,17 @@ public class FXMLDocumentController implements Initializable {
         String pencukur = this.choiceBoxPelayan.getSelectionModel().getSelectedItem().toString();
 //        dd += "\n" + this.fieldNama.getText();
 //        dadangQ.setText(dd);
-        mapLblTextPencukur.put(pencukur, mapLblTextPencukur.get(pencukur)+"\n"+this.fieldNama.getText());
+        mapLblTextPencukur.put(pencukur, mapLblTextPencukur.get(pencukur) + "\n" + this.fieldNama.getText());
         temp = mapLblPencukur.get(pencukur);
         temp.setText(mapLblTextPencukur.get(pencukur));
         mapLblPencukur.put(pencukur, temp);
-        
+
         this.fieldNama.clear();
+    }
+    
+    @FXML
+    private void handleBtnSelesai(ActionEvent event) {
+        System.out.println(tabTukangCukur.getSelectionModel().getSelectedItem().getText());
     }
 
     public void changeChoiceBox(String gender) {
@@ -102,18 +111,18 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
-          
+
     }
 
     public void start() {
         //Buat tukang cukurnya di sini.
-        String namaPencukur[] = {"Dadang","Sarwa","Sany","Brigitta"};
+        String namaPencukur[] = {"Dadang", "Sarwa", "Sany", "Brigitta"};
         int i;
-        for(i = 0; i < namaPencukur.length; i++){
+        for (i = 0; i < namaPencukur.length; i++) {
             mapLblTextPencukur.put(namaPencukur[i], "");
             mapLblPencukur.put(namaPencukur[i], new Label());
         }
-        
+
         for (i = 0; i < namaPencukur.length; i++) {
             Tab tab = new Tab(namaPencukur[i]);
             Label label = new Label();
@@ -121,5 +130,6 @@ public class FXMLDocumentController implements Initializable {
             tab.setContent(label);
             tabTukangCukur.getTabs().add(tab);
         }
+
     }
 }
