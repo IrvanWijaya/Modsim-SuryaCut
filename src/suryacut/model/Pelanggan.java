@@ -36,4 +36,8 @@ public class Pelanggan {
     public void setState(String state){
         this.state = state;
     }
+    
+    public String getState(){
+        return this.state;
+    }
 }

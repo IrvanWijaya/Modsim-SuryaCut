@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="595.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="suryacut.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="666.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="suryacut.FXMLDocumentController">
     <children>
       <Pane layoutY="-1.0" prefHeight="249.0" prefWidth="476.0" style="-fx-background-color: #0000ff;">
          <children>
@@ -41,9 +41,12 @@
       <TextField fx:id="fieldPencarian" layoutX="97.0" layoutY="260.0" />
       <Text layoutX="19.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Cukur" />
       <Text layoutX="17.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Queue Keramas" />
-      <Label fx:id="lblQueueKeramas" layoutX="19.0" layoutY="512.0" prefHeight="69.0" prefWidth="438.0" text="Label" />
-      <Button fx:id="btnCari" layoutX="260.0" layoutY="260.0" mnemonicParsing="false" text="Cari" />
+      <Label fx:id="lblQueueKeramas" layoutX="19.0" layoutY="512.0" prefHeight="139.0" prefWidth="438.0" />
+      <Button fx:id="btnCari" layoutX="260.0" layoutY="260.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Cari" />
       <TabPane fx:id="tabTukangCukur" layoutX="19.0" layoutY="334.0" prefHeight="139.0" prefWidth="438.0" tabClosingPolicy="UNAVAILABLE" />
       <Button fx:id="btnSelesai" layoutX="97.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleBtnSelesai" text="Selesai Melayani" />
+      <Button fx:id="btnTmpatKeramas1" layoutX="120.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleBtnKeramas" text="1" userData="1" />
+      <Button fx:id="btnTmpatKeramas2" layoutX="160.0" layoutY="483.0" mnemonicParsing="false" text="2" userData="2" />
+      <Button fx:id="btnTmpatKeramas3" layoutX="200.0" layoutY="483.0" mnemonicParsing="false" text="3" userData="3" />
     </children>
 </AnchorPane>

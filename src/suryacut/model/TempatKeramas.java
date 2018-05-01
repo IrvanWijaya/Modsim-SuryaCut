@@ -32,10 +32,10 @@ public class TempatKeramas extends Pelayan{
     }
     
     public int servePelangan(){
-        if(queue.isEmpty())return -1;
-        Pelanggan p=queue.poll();
+        if(queue.isEmpty())return -2;
         for (int i = 0; i < servers.length; i++) {
             if(servers[i]==null){
+                Pelanggan p=queue.poll();
                 servers[i]=p;
                 return i;
             }
