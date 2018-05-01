@@ -5,15 +5,19 @@
  */
 package suryacut.model;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author CorneliusDavid
  */
-public class TempatKeramas {
+public class TempatKeramas extends Pelayan{
     private static TempatKeramas instance;
+    private Pelanggan[] servers;
     
     private TempatKeramas(){
-        
+        queue=new LinkedList<>();
+        servers=new Pelanggan[3];
     }
     
     public static TempatKeramas getInstance(){
@@ -21,5 +25,23 @@ public class TempatKeramas {
             instance=new TempatKeramas();
         }
         return instance;
+    }
+    
+    public int servePelangan(){
+        if(queue.isEmpty())return -1;
+        Pelanggan p=queue.poll();
+        for (int i = 0; i < servers.length; i++) {
+            if(servers[i]==null){
+                servers[i]=p;
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public Pelanggan finishServe(int idx){
+        Pelanggan p=servers[idx];
+        servers[idx]=null;
+        return p;
     }
 }
