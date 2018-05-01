@@ -6,19 +6,31 @@
 package suryacut.model;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  *
  * @author CorneliusDavid
  */
-public class TukangCukur {
-    private Queue antrean;
+public class TukangCukur extends Pelayan{
     private String nama;
+    private Pelanggan currentlyServed;
 
     public TukangCukur(String nama) {
         this.nama = nama;
-        antrean=new LinkedList();
+        queue=new LinkedList<>();
     }
     
+    public boolean serveNext(){
+        if(queue.isEmpty())return false;
+        currentlyServed=queue.poll();
+        return true;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public Pelanggan getCurrentlyServed() {
+        return currentlyServed;
+    }
 }

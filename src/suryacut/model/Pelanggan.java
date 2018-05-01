@@ -17,6 +17,12 @@ public class Pelanggan {
         this.nama = nama;
         this.gender = gender;
     }
-    
-    
+
+    public String getNama() {
+        return nama;
+    }
+
+    public char getGender() {
+        return gender;
+    }
 }
