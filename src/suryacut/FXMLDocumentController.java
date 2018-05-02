@@ -5,12 +5,20 @@
  */
 package suryacut;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -48,8 +57,8 @@ public class FXMLDocumentController implements Initializable {
     private Button btnSubmit;
     @FXML
     private Button btnSelesai;
-    @FXML
-    private Label lblQueueKeramas;
+//    @FXML
+//    private Label lblQueueKeramas;
     @FXML
     private TabPane tabTukangCukur;
     @FXML
@@ -60,11 +69,20 @@ public class FXMLDocumentController implements Initializable {
     private Button btnTmpatKeramas2;
     @FXML
     private Button btnTmpatKeramas3;
+    @FXML
+    private ListView lvQueueKeramas;
+    private List<String> listQueueKeramas = new ArrayList<>();
+    private ListProperty<String> propertyQueueKeramas = new SimpleListProperty<>();
 
-    private HashMap<String, String> mapLblTextPencukur = new HashMap<String, String>();
-    private HashMap<String, Label> mapLblPencukur = new HashMap<String, Label>();
-    private Label temp;
+    //Untuk list view
+    //Set nilainya dengan hmObservedList
+    private HashMap<String, ListProperty<String>> hmListPropertyPencukur = new HashMap<String, ListProperty<String>>();
+    //Ubah array list nya untuk mengupdate nilai list property
+    private HashMap<String, List<String>> hmObservedList = new HashMap<String, List<String>>();
 
+    //diganti sama listProperty
+//    private HashMap<String, String> mapLblTextPencukur = new HashMap<String, String>();
+//    private HashMap<String, Label> mapLblPencukur = new HashMap<String, Label>();
     TukangCukur tempTC;
     Pelanggan tempPelanggan;
 
@@ -97,12 +115,17 @@ public class FXMLDocumentController implements Initializable {
             tempPelanggan.setState("Menunggu cukur");
             System.out.println("Menunggu");
 
-            //this.mengantrikanKembali(tempTC);
             //code untuk mengatur tampilan queue pada tukang cukur
-            mapLblTextPencukur.put(namaPelayan, mapLblTextPencukur.get(namaPelayan) + namaPelanggan + "\n");
-            temp = mapLblPencukur.get(namaPelayan);
-            temp.setText(mapLblTextPencukur.get(namaPelayan));
-            mapLblPencukur.put(namaPelayan, temp);
+            hmObservedList.get(namaPelayan).add(namaPelanggan);
+            hmListPropertyPencukur.get(namaPelayan)
+                    .set(FXCollections.observableArrayList(hmObservedList.get(namaPelayan)));
+            //this.mengantrikanKembali(tempTC);
+            //Label temp;
+            //code untuk mengatur tampilan queue pada tukang cukur CARA LAMA!!
+//            mapLblTextPencukur.put(namaPelayan, mapLblTextPencukur.get(namaPelayan) + namaPelanggan + "\n");
+//            temp = mapLblPencukur.get(namaPelayan);
+//            temp.setText(mapLblTextPencukur.get(namaPelayan));
+//            mapLblPencukur.put(namaPelayan, temp);
         }
 
         mapPelanggan.put(namaPelanggan, tempPelanggan);
@@ -118,7 +141,7 @@ public class FXMLDocumentController implements Initializable {
         if (tempPelanggan.getKeramas()) {
             tempPelanggan.setState("Sedang Keramas");
             System.out.println(tempPelanggan.getNama() + " Keramas");
-            this.layaniKeramas(tempPelanggan, 1);
+            this.layaniKeramas(tempPelanggan);
         } else {
             mapPelanggan.remove(tempPelanggan);
         }
@@ -142,69 +165,50 @@ public class FXMLDocumentController implements Initializable {
 
         System.out.println(value);
         tempPelanggan = tempatKeramas.finishServe(value - 1);
-        layaniKeramas(tempatKeramas.getNextServed(), 2);
+        layaniKeramas(tempatKeramas.getNextServed());
 
         mapPelanggan.remove(tempPelanggan.getNama());
     }
-    
-    @FXML
-    private void handleSearchButton(ActionEvent event) {
-        tempPelanggan = mapPelanggan.get(this.fieldPencarian.getText());
-        if(tempPelanggan != null){
-            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
-        }else{
-            Popup.display("Pencarian gagal!!", "Nama '"+this.fieldPencarian.getText() +"' tidak ditemukan");
-        }
-    }
 
-    public void layaniKeramas(Pelanggan pelanggan, int from) {
-        //1 = from button selesai, 2 from button keramas
-        if (from == 1) {
-            tempatKeramas.insertPelangganIntoQueue(pelanggan);
-            antreanText = this.lblQueueKeramas.getText() + pelanggan.getNama() + "\n";
-        } else {
-            antrean = this.lblQueueKeramas.getText().split("\n");
-            antreanText = "";
-            for (int i = 1; i < antrean.length; i++) {
-                antreanText += antrean[i] + "\n";
-            }
-        }
-
+    public void layaniKeramas(Pelanggan pelanggan) {
         //-1 penuh, -2 tidak ada yg mw keramas lagi
+        tempatKeramas.insertPelangganIntoQueue(pelanggan);
         int status = tempatKeramas.servePelangan();
         if (status == -1) {
             pelanggan.setState("Menunggu Keramas");
             System.out.println(pelanggan.getNama() + " Menunggu Keramas");
-            this.lblQueueKeramas.setText(antreanText);
+            listQueueKeramas.add(pelanggan.getNama());
+            propertyQueueKeramas.set(FXCollections.observableArrayList(listQueueKeramas));
+            //this.lblQueueKeramas.setText(antreanText);
         } else if (status == -2) {
             System.out.println("Tempat Keramas Nganggur");
         } else {
             pelanggan.setState("Sedang Keramas");
             System.out.println(pelanggan.getNama() + " Sedang Keramas");
-            if (from == 2) {
-                this.lblQueueKeramas.setText(antreanText);
+            if (!listQueueKeramas.isEmpty()) {
+                listQueueKeramas.remove(0);
+                propertyQueueKeramas.set(FXCollections.observableArrayList(listQueueKeramas));
             }
+
         }
     }
 
-    //Membuat tabpane dan inisialisasi tukang cukur.
-    public void createTabPane() {
-        String namaPencukur[] = {"Dadang", "Sarwa", "Sany", "Brigitta"};
-        int i;
-        for (i = 0; i < namaPencukur.length; i++) {
-            mapLblTextPencukur.put(namaPencukur[i], "");
-            mapLblPencukur.put(namaPencukur[i], new Label());
-            mapTukangCukur.put(namaPencukur[i], new TukangCukur(namaPencukur[i]));
+    public void mengantrikanKembali(TukangCukur tc) {
+        if (!hmObservedList.get(tc.getNama()).isEmpty()) {
+            hmObservedList.get(tc.getNama()).remove(0);
         }
+        hmListPropertyPencukur.get(tc.getNama())
+                .set(FXCollections.observableArrayList(hmObservedList.get(tc.getNama())));
+    }
 
-        for (i = 0; i < namaPencukur.length; i++) {
-            Tab tab = new Tab(namaPencukur[i]);
-            Label label = new Label();
-            label.textProperty().bind(this.mapLblPencukur.get(namaPencukur[i]).textProperty());
-            tab.setContent(label);
-            tabTukangCukur.getTabs().add(tab);
+    @FXML
+    private void handleSearchButton(ActionEvent event) {
+        tempPelanggan = mapPelanggan.get(this.fieldPencarian.getText());
+        if (tempPelanggan != null) {
+            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+        } else {
+            Popup.display("Pencarian gagal!!", "Nama '" + this.fieldPencarian.getText() + "' tidak ditemukan");
         }
-
     }
 
     //Mengganti isi choice box berdasar gender
@@ -217,33 +221,27 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void mengantrikanKembali(TukangCukur tc) {
-        String[] antrean = mapLblTextPencukur.get(tc.getNama()).split("\n");
-        String antreanText = "";
+    //Membuat tabpane dan inisialisasi tukang cukur.
+    public void createTabPane() {
+        String namaPencukur[] = {"Dadang", "Sarwa", "Sany", "Brigitta"};
+        int i;
 
-        for (int i = 1; i < antrean.length; i++) {
-            antreanText += antrean[i] + "\n";
+        for (i = 0; i < namaPencukur.length; i++) {
+            //Siapkan list
+            hmListPropertyPencukur.put(namaPencukur[i], new SimpleListProperty<>());
+            hmObservedList.put(namaPencukur[i], new ArrayList<>());
+
+            //buat tab berisi listview yang sudah terbind
+            Tab tab = new Tab(namaPencukur[i]);
+            ListView lv = new ListView();
+            lv.itemsProperty().bind(hmListPropertyPencukur.get(namaPencukur[i]));
+
+            tab.setContent(lv);
+            tabTukangCukur.getTabs().add(tab);
+
+            //inisialisasi tukang cukur
+            mapTukangCukur.put(namaPencukur[i], new TukangCukur(namaPencukur[i]));
         }
-        mapLblTextPencukur.put(tc.getNama(), antreanText);
-        temp = mapLblPencukur.get(tc.getNama());
-        temp.setText(mapLblTextPencukur.get(tc.getNama()));
-        mapLblPencukur.put(tc.getNama(), temp);
-
-//        Pelanggan[] arrTempPelanggan;
-//        System.out.println(tc.getNextServed().getNama());
-//        System.out.println(tc.getQueue()[0].getNama());
-//        if (tc.getQueue() != null) {
-//            arrTempPelanggan = (Pelanggan[]) tc.getQueue();
-//            for (int i = 0; i < arrTempPelanggan.length; i++) {
-//                //code untuk mengatur tampilan queue pada tukang cukur
-//                mapLblTextPencukur.put(tc.getNama(), mapLblTextPencukur.get(tc.getNama()) + "\n" + arrTempPelanggan[i].getNama());
-//                temp = mapLblPencukur.get(tc.getNama());
-//                temp.setText(mapLblTextPencukur.get(tc.getNama()));
-//                mapLblPencukur.put(tc.getNama(), temp);
-//            }
-//        } else {
-//            System.out.println("Tidak ada lagi di antrian");
-//        }
     }
 
     @Override
@@ -252,7 +250,12 @@ public class FXMLDocumentController implements Initializable {
         mapTukangCukur = new HashMap<String, TukangCukur>();
         mapPelanggan = new HashMap<String, Pelanggan>();
         tempatKeramas = TempatKeramas.getInstance();
+
+        //buat tab pane
         this.createTabPane();
+
+        //bind observable dan listview queue keramas
+        lvQueueKeramas.itemsProperty().bind(propertyQueueKeramas);
 
         //Membuat group untuk radio button
         ToggleGroup groupRdbGender = new ToggleGroup();
