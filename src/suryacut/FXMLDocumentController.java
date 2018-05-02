@@ -5,7 +5,6 @@
  */
 package suryacut;
 
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,14 +17,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
@@ -33,6 +30,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import suryacut.model.*;
 
 /**
@@ -119,13 +117,6 @@ public class FXMLDocumentController implements Initializable {
             hmObservedList.get(namaPelayan).add(namaPelanggan);
             hmListPropertyPencukur.get(namaPelayan)
                     .set(FXCollections.observableArrayList(hmObservedList.get(namaPelayan)));
-            //this.mengantrikanKembali(tempTC);
-            //Label temp;
-            //code untuk mengatur tampilan queue pada tukang cukur CARA LAMA!!
-//            mapLblTextPencukur.put(namaPelayan, mapLblTextPencukur.get(namaPelayan) + namaPelanggan + "\n");
-//            temp = mapLblPencukur.get(namaPelayan);
-//            temp.setText(mapLblTextPencukur.get(namaPelayan));
-//            mapLblPencukur.put(namaPelayan, temp);
         }
 
         mapPelanggan.put(namaPelanggan, tempPelanggan);
@@ -141,7 +132,7 @@ public class FXMLDocumentController implements Initializable {
         if (tempPelanggan.getKeramas()) {
             tempPelanggan.setState("Sedang Keramas");
             System.out.println(tempPelanggan.getNama() + " Keramas");
-            this.layaniKeramas(tempPelanggan,1);
+            this.layaniKeramas(tempPelanggan, 1);
         } else {
             mapPelanggan.remove(tempPelanggan);
         }
@@ -165,16 +156,18 @@ public class FXMLDocumentController implements Initializable {
 
         System.out.println(value);
         tempPelanggan = tempatKeramas.finishServe(value - 1);
-        layaniKeramas(tempatKeramas.getNextServed(),0);
+        layaniKeramas(tempatKeramas.getNextServed(), 0);
 
         mapPelanggan.remove(tempPelanggan.getNama());
     }
 
-    public void layaniKeramas(Pelanggan pelanggan,int from) {
-        
+    public void layaniKeramas(Pelanggan pelanggan, int from) {
+
         //from 1  = btn selesai, else = btn keramas
-        if(from == 1)tempatKeramas.insertPelangganIntoQueue(pelanggan);
-        
+        if (from == 1) {
+            tempatKeramas.insertPelangganIntoQueue(pelanggan);
+        }
+
         //-1 penuh, -2 tidak ada yg mw keramas lagi
         int status = tempatKeramas.servePelangan();
         if (status == -1) {
@@ -244,6 +237,24 @@ public class FXMLDocumentController implements Initializable {
 
             //inisialisasi tukang cukur
             mapTukangCukur.put(namaPencukur[i], new TukangCukur(namaPencukur[i]));
+
+            lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent click) {
+                    if (click.getClickCount() == 2) {
+                        tempPelanggan = mapPelanggan.get(lv.getSelectionModel()
+                                .getSelectedItem());
+                        if (tempPelanggan != null) {
+                            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+                        } else {
+                            Popup.display("Pencarian gagal!!", "Nama '" + lv.getSelectionModel()
+                                    .getSelectedItem() + "' tidak ditemukan");
+                        }
+                    }
+                }
+            });
+
         }
     }
 
@@ -277,5 +288,21 @@ public class FXMLDocumentController implements Initializable {
             }
         });
 
+        lvQueueKeramas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    tempPelanggan = mapPelanggan.get(lvQueueKeramas.getSelectionModel()
+                            .getSelectedItem());
+                    if (tempPelanggan != null) {
+                        Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+                    } else {
+                        Popup.display("Pencarian gagal!!", "Nama '" + lvQueueKeramas.getSelectionModel()
+                                .getSelectedItem() + "' tidak ditemukan");
+                    }
+                }
+            }
+        });
     }
 }
