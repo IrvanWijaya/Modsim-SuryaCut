@@ -141,7 +141,7 @@ public class FXMLDocumentController implements Initializable {
         if (tempPelanggan.getKeramas()) {
             tempPelanggan.setState("Sedang Keramas");
             System.out.println(tempPelanggan.getNama() + " Keramas");
-            this.layaniKeramas(tempPelanggan);
+            this.layaniKeramas(tempPelanggan,1);
         } else {
             mapPelanggan.remove(tempPelanggan);
         }
@@ -165,14 +165,17 @@ public class FXMLDocumentController implements Initializable {
 
         System.out.println(value);
         tempPelanggan = tempatKeramas.finishServe(value - 1);
-        layaniKeramas(tempatKeramas.getNextServed());
+        layaniKeramas(tempatKeramas.getNextServed(),0);
 
         mapPelanggan.remove(tempPelanggan.getNama());
     }
 
-    public void layaniKeramas(Pelanggan pelanggan) {
+    public void layaniKeramas(Pelanggan pelanggan,int from) {
+        
+        //from 1  = btn selesai, else = btn keramas
+        if(from == 1)tempatKeramas.insertPelangganIntoQueue(pelanggan);
+        
         //-1 penuh, -2 tidak ada yg mw keramas lagi
-        tempatKeramas.insertPelangganIntoQueue(pelanggan);
         int status = tempatKeramas.servePelangan();
         if (status == -1) {
             pelanggan.setState("Menunggu Keramas");
