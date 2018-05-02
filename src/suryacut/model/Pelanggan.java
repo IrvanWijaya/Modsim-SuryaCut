@@ -14,11 +14,14 @@ public class Pelanggan {
     private char gender;
     private boolean keramas;
     private String state;
+    private long waktuDilayani;
+    private String namaTukangCukur;
 
-    public Pelanggan(String nama, char gender, boolean keramas) {
+    public Pelanggan(String nama, char gender, boolean keramas, String namaTukangCukur) {
         this.nama = nama;
         this.gender = gender;
         this.keramas = keramas;
+        this.namaTukangCukur = namaTukangCukur;
     }
 
     public String getNama() {
@@ -39,5 +42,17 @@ public class Pelanggan {
     
     public String getState(){
         return this.state;
+    }
+    
+    public void setWaktuDilayani(long time){
+        this.waktuDilayani = time;
+    }
+    
+    public long getWaktuDilayani(){
+        return this.waktuDilayani;
+    }
+    
+    public String getNamaPelayan(){
+        return this.namaTukangCukur;
     }
 }

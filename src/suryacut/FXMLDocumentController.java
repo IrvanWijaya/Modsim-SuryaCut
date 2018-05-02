@@ -100,7 +100,7 @@ public class FXMLDocumentController implements Initializable {
         char gender = (this.rdbPria.isSelected()) ? 'P' : 'W';
 
         //Menyimpan model pelanggan yang datang
-        tempPelanggan = new Pelanggan(namaPelanggan, gender, this.chkKeramas.isSelected());
+        tempPelanggan = new Pelanggan(namaPelanggan, gender, this.chkKeramas.isSelected(), namaPelayan);
 
         //System.out.println(mapLblTextPencukur.get(pencukur));
         tempTC = mapTukangCukur.get(namaPelayan);
@@ -108,6 +108,7 @@ public class FXMLDocumentController implements Initializable {
         if (tempTC.getCurrentlyServed() == null) {
             tempTC.serveNext();
             tempPelanggan.setState("Sedang dicukur");
+            tempPelanggan.setWaktuDilayani(System.currentTimeMillis());
             System.out.println("Sedang dicukur");
         } else {
             tempPelanggan.setState("Menunggu cukur");
@@ -130,7 +131,8 @@ public class FXMLDocumentController implements Initializable {
         tempPelanggan = tempTC.getCurrentlyServed();
 
         if (tempPelanggan.getKeramas()) {
-            tempPelanggan.setState("Sedang Keramas");
+            tempPelanggan.setState("Sedang keramas");
+            tempPelanggan.setWaktuDilayani(System.currentTimeMillis());
             System.out.println(tempPelanggan.getNama() + " Keramas");
             this.layaniKeramas(tempPelanggan, 1);
         } else {
@@ -140,6 +142,7 @@ public class FXMLDocumentController implements Initializable {
         if (tempTC.serveNext()) {
             tempPelanggan = tempTC.getCurrentlyServed();
             tempPelanggan.setState("Sedang dicukur");
+            tempPelanggan.setWaktuDilayani(System.currentTimeMillis());
             System.out.println(tempPelanggan.getNama() + " Sedang dicukur");
         } else {
             System.out.println("Tukang cukur nganggur");
@@ -179,7 +182,8 @@ public class FXMLDocumentController implements Initializable {
         } else if (status == -2) {
             System.out.println("Tempat Keramas Nganggur");
         } else {
-            pelanggan.setState("Sedang Keramas");
+            pelanggan.setState("Sedang keramas");
+            pelanggan.setWaktuDilayani(System.currentTimeMillis());
             System.out.println(pelanggan.getNama() + " Sedang Keramas");
             if (!listQueueKeramas.isEmpty()) {
                 listQueueKeramas.remove(0);
@@ -200,10 +204,29 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleSearchButton(ActionEvent event) {
         tempPelanggan = mapPelanggan.get(this.fieldPencarian.getText());
-        if (tempPelanggan != null) {
-            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+        //System.out.println(estimasi);
+        if (tempPelanggan == null) {
+            Popup.display("Pencarian gagal!!", "Nama '" + this.fieldPencarian.getText()
+                    + "' tidak ditemukan", "Anda mungkin melakukan kesalahan pengetikan nama.");
         } else {
-            Popup.display("Pencarian gagal!!", "Nama '" + this.fieldPencarian.getText() + "' tidak ditemukan");
+            int pengali = (tempPelanggan.getState().equals("Menunggu Keramas")) ? 5 : 20;
+            tempTC = mapTukangCukur.get(tempPelanggan.getNamaPelayan());
+
+            //System.out.println(tempPelanggan.getNama());
+            int tempUrutan = tempTC.getUrutanPelanggan(tempPelanggan);
+            long waktuSekarang = System.currentTimeMillis();
+            int estimasi = 0;
+            if (pengali == 5) {
+                tempUrutan = tempatKeramas.getUrutanPelanggan(tempPelanggan);
+                estimasi = (tempUrutan + 1) * 5;
+            } else {
+                long waktuPelayanan = mapTukangCukur.get(tabTukangCukur.getSelectionModel().getSelectedItem().getText())
+                        .getCurrentlyServed()
+                        .getWaktuDilayani();
+                int menungguYangDilayani = 20 - (int) (((waktuSekarang - waktuPelayanan) / (1000 * 60)) % 60);
+                estimasi = menungguYangDilayani + (tempUrutan) * 20;
+            }
+            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState(), "Perkiraan akan dilayani dalam " + estimasi + " menit");
         }
     }
 
@@ -242,14 +265,25 @@ public class FXMLDocumentController implements Initializable {
 
                 @Override
                 public void handle(MouseEvent click) {
+                    //System.out.println(tabTukangCukur.getSelectionModel().getSelectedItem().getText());
                     if (click.getClickCount() == 2) {
                         tempPelanggan = mapPelanggan.get(lv.getSelectionModel()
                                 .getSelectedItem());
+                        //System.out.println(tempPelanggan.getNama());
+                        int tempUrutan = mapTukangCukur.get(tabTukangCukur.getSelectionModel().getSelectedItem().getText())
+                                .getUrutanPelanggan(tempPelanggan);
+                        long waktuSekarang = System.currentTimeMillis();
+                        long waktuPelayanan = mapTukangCukur.get(tabTukangCukur.getSelectionModel().getSelectedItem().getText())
+                                .getCurrentlyServed()
+                                .getWaktuDilayani();
+                        int menungguYangDilayani = 20 - (int) (((waktuSekarang - waktuPelayanan) / (1000 * 60)) % 60);
+                        int estimasi = menungguYangDilayani + (tempUrutan) * 20;
+                        //System.out.println(estimasi);
                         if (tempPelanggan != null) {
-                            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+                            Popup.display(tempPelanggan.getNama(), tempPelanggan.getState(), "Perkiraan akan dilayani dalam " + estimasi + " menit");
                         } else {
                             Popup.display("Pencarian gagal!!", "Nama '" + lv.getSelectionModel()
-                                    .getSelectedItem() + "' tidak ditemukan");
+                                    .getSelectedItem() + "' tidak ditemukan", "Anda mungkin melakukan kesalahan pengetikan nama.");
                         }
                     }
                 }
@@ -295,11 +329,15 @@ public class FXMLDocumentController implements Initializable {
                 if (click.getClickCount() == 2) {
                     tempPelanggan = mapPelanggan.get(lvQueueKeramas.getSelectionModel()
                             .getSelectedItem());
+                    //System.out.println(tempPelanggan.getNama());
+                    int tempUrutan = tempatKeramas.getUrutanPelanggan(tempPelanggan);
+                    int estimasi = (tempUrutan + 1) * 5;
+                    //System.out.println(estimasi);
                     if (tempPelanggan != null) {
-                        Popup.display(tempPelanggan.getNama(), tempPelanggan.getState());
+                        Popup.display(tempPelanggan.getNama(), tempPelanggan.getState(), "Perkiraan akan dilayani dalam " + estimasi + " menit");
                     } else {
                         Popup.display("Pencarian gagal!!", "Nama '" + lvQueueKeramas.getSelectionModel()
-                                .getSelectedItem() + "' tidak ditemukan");
+                                .getSelectedItem() + "' tidak ditemukan", "Anda mungkin melakukan kesalahan pengetikan nama.");
                     }
                 }
             }

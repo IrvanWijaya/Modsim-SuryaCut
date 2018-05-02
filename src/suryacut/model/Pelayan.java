@@ -5,6 +5,8 @@
  */
 package suryacut.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -27,9 +29,9 @@ public class Pelayan {
     }
     
     public int getUrutanPelanggan(Pelanggan p){
-        Pelanggan[] tmp=(Pelanggan[]) queue.toArray();
-        for (int i = 0; i < tmp.length; i++) {
-            if(tmp[i]==p)return i;
+        ArrayList list = new ArrayList(queue);
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i)==p)return i;
         }
         return -1;
     }
