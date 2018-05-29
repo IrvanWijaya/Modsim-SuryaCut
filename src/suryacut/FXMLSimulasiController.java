@@ -52,9 +52,16 @@ public class FXMLSimulasiController implements Initializable {
     private RadioButton rdbNomor;
     @FXML
     private Label lblHasil;
+    @FXML
+    private Button btnRandomTc;
 
     private boolean bolehMilih;
     private int utilitas;
+    private int waktuKedatangan[];
+    private int tukangCukurPilihan[];
+    private int banyakPelanggan;
+    private int banyakTukangCukur;
+    private int banyakTukangKeramas;
 
     /**
      * Initializes the controller class.
@@ -110,29 +117,18 @@ public class FXMLSimulasiController implements Initializable {
 
     @FXML
     public void submit() throws IOException {
-        int banyakPelanggan = Integer.parseInt(txtJumlahPelanggan.getText());
-        int banyakTukangCukur = Integer.parseInt(txtJumlahPencukur.getText());
-        int banyakTukangKeramas = Integer.parseInt(txtJumlahPengeramas.getText());
 
         Simulator sm = new Simulator(banyakTukangCukur, banyakTukangKeramas);
 
-        int waktuKedatangan[] = new int[banyakPelanggan];
-        int tukangCukurPilihan[] = new int[banyakPelanggan];
-
-        Random rand = new Random();
-        int waktu = 0;
-
         int i;
         for (i = 0; i < waktuKedatangan.length; i++) {
-            waktu = waktu + rand.nextInt(10) + 1;
-            waktuKedatangan[i] = waktu;
+            int selesaiCukur;
             if (bolehMilih) {
-                tukangCukurPilihan[i] = rand.nextInt(banyakTukangCukur + 1) - 1;
+                selesaiCukur = sm.insertCukur(waktuKedatangan[i], tukangCukurPilihan[i], utilitas);
             } else {
-                tukangCukurPilihan[i] = -1;
+                selesaiCukur = sm.insertCukur(waktuKedatangan[i], -1, utilitas);
             }
 
-            int selesaiCukur = sm.insertCukur(waktuKedatangan[i], tukangCukurPilihan[i], utilitas);
             sm.insertKeramas(selesaiCukur, utilitas);
         }
 
@@ -161,6 +157,26 @@ public class FXMLSimulasiController implements Initializable {
                 + "Rata- rata wait : " + sm.getWaitAverage(banyakPelanggan) + "\n";
 
         lblHasil.setText(hasil);
+    }
+
+    @FXML
+    public void randomUlang() {
+        this.banyakPelanggan = Integer.parseInt(txtJumlahPelanggan.getText());
+        this.banyakTukangCukur = Integer.parseInt(txtJumlahPencukur.getText());
+        this.banyakTukangKeramas = Integer.parseInt(txtJumlahPengeramas.getText());
+
+        this.waktuKedatangan = new int[banyakPelanggan];
+        this.tukangCukurPilihan = new int[banyakPelanggan];
+        Random rand = new Random();
+
+        int waktu = 0;
+
+        int i;
+        for (i = 0; i < waktuKedatangan.length; i++) {
+            waktu = waktu + rand.nextInt(10) + 1;
+            waktuKedatangan[i] = waktu;
+            tukangCukurPilihan[i] = rand.nextInt(banyakTukangCukur + 1) - 1;
+        }
     }
 
 }
