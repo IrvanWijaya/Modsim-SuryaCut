@@ -5,6 +5,7 @@
  */
 package suryacut;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -31,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import suryacut.model.*;
 
 /**
@@ -39,6 +42,8 @@ import suryacut.model.*;
  */
 public class FXMLDocumentController implements Initializable {
 
+    @FXML
+    private AnchorPane rootPane;
     @FXML
     private TextField fieldNama;
     @FXML
@@ -49,24 +54,12 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox choiceBoxPelayan;
     @FXML
     private TextField fieldPencarian;
-    @FXML
-    private Button btnCari;
-    @FXML
-    private Button btnSubmit;
-    @FXML
-    private Button btnSelesai;
 //    @FXML
 //    private Label lblQueueKeramas;
     @FXML
     private TabPane tabTukangCukur;
     @FXML
     private CheckBox chkKeramas;
-    @FXML
-    private Button btnTmpatKeramas1;
-    @FXML
-    private Button btnTmpatKeramas2;
-    @FXML
-    private Button btnTmpatKeramas3;
     @FXML
     private ListView lvQueueKeramas;
     private List<String> listQueueKeramas = new ArrayList<>();
@@ -91,6 +84,22 @@ public class FXMLDocumentController implements Initializable {
     private HashMap<String, TukangCukur> mapTukangCukur;
     private HashMap<String, Pelanggan> mapPelanggan;
     private TempatKeramas tempatKeramas;
+    @FXML
+    private Button btnSubmit;
+    @FXML
+    private ToggleGroup gender;
+    @FXML
+    private Button btnSimulasi;
+    @FXML
+    private Button btnCari;
+    @FXML
+    private Button btnSelesai;
+    @FXML
+    private Button btnTmpatKeramas1;
+    @FXML
+    private Button btnTmpatKeramas2;
+    @FXML
+    private Button btnTmpatKeramas3;
 
     //Menambahkan pelanggan ke antrian yang tepat.
     @FXML
@@ -342,5 +351,11 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
+    }
+    
+    @FXML
+    public void loadSimulasi() throws IOException{
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("FXMLSimulasi.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
 }

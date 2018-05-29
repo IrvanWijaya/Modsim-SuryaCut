@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="699.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="suryacut.FXMLSimulasiController">
+    <children>
+        <Label fx:id="lblHasil" layoutX="44.0" layoutY="429.0" prefHeight="218.0" prefWidth="330.0" />
+        <Text layoutX="135.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Simulasi" wrappingWidth="147.0">
+            <font>
+                <Font size="40.0" />
+            </font>
+        </Text>
+        <Text layoutX="76.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah Pelanggan" />
+        <TextField fx:id="txtJumlahPelanggan" layoutX="226.0" layoutY="99.0" />
+        <Text layoutX="61.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah Tukang Cukur" />
+        <Text layoutX="44.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah Tukang Keramas" />
+        <TextField fx:id="txtJumlahPencukur" layoutX="226.0" layoutY="153.0" />
+        <TextField fx:id="txtJumlahPengeramas" layoutX="226.0" layoutY="204.0" />
+        <Button fx:id="btnSubmit" layoutX="161.0" layoutY="377.0" mnemonicParsing="false" onAction="#submit" prefHeight="43.0" prefWidth="96.0" text="Submit" />
+        <Text layoutX="24.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Boleh Memilih Tukang cukur" />
+        <Text layoutX="25.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Urutan Pengerjaan berdasar" />
+        <RadioButton fx:id="rdbYa" layoutX="231.0" layoutY="264.0" mnemonicParsing="false" text="Ya" />
+        <RadioButton fx:id="rdbTidak" layoutX="325.0" layoutY="264.0" mnemonicParsing="false" text="Tidak" />
+        <RadioButton fx:id="rdbLamaKerja" layoutX="231.0" layoutY="321.0" mnemonicParsing="false" text="Lama Kerja" />
+        <RadioButton fx:id="rdbNomor" layoutX="325.0" layoutY="321.0" mnemonicParsing="false" text="Nomor" />
+      <Button fx:id="btnBack" layoutX="329.0" layoutY="28.0" mnemonicParsing="false" onAction="#loadSistem" text="Back" />
+    </children>
+
+</AnchorPane>

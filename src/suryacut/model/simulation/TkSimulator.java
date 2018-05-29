@@ -58,4 +58,12 @@ public class TkSimulator {
         return total;
     }
     
+    public int getTotalWait(){
+        int total = 0;
+        for(int i = 0; i < listDetil.size() ; i++){
+            total += listDetil.get(i).getWait();
+        }
+        return total;
+    }
+    
 }

@@ -48,5 +48,7 @@ public class Tester {
         
         System.out.println(sm.getWaktuAkhirSimulasi());
         System.out.println(sm.getDelayAverage(banyakPelanggan));
+        System.out.println(sm.getWaitAverage(banyakPelanggan));
+        
     }
 }

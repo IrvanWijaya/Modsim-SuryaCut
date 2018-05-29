@@ -106,5 +106,19 @@ public class Simulator {
         
         return total * 1.0/jumlahPelanggan;
     }
+    
+    public double getWaitAverage(int jumlahPelanggan){
+        int total = 0;
+        int i,j;
+        for(i = 0; i < tukangCukur.length; i++){
+            total += tukangCukur[i].getTotalWait();
+        }
+        
+        for(i = 0; i < tukangCukur.length; i++){
+            total += tukangKeramas[i].getTotalWait();
+        }
+        
+        return total * 1.0/jumlahPelanggan;
+    }
 
 }
