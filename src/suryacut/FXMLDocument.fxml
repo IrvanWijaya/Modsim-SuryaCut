@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="666.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="suryacut.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="666.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="suryacut.FXMLDocumentController">
     <children>
       <Pane layoutY="-1.0" prefHeight="249.0" prefWidth="476.0" style="-fx-background-color: #0000ff;">
          <children>
@@ -27,6 +27,7 @@
             <RadioButton fx:id="rdbWanita" layoutX="209.0" layoutY="108.0" mnemonicParsing="false" text="Wanita" toggleGroup="$gender" />
             <Text layoutX="55.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keramas" />
             <CheckBox fx:id="chkKeramas" layoutX="131.0" layoutY="137.0" mnemonicParsing="false" />
+            <Button fx:id="btnSimulasi" layoutX="373.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadSimulasi" text="Load Simulasi" />
          </children></Pane>
       <Text layoutX="174.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surya Cut" wrappingWidth="127.82421875">
          <font>
